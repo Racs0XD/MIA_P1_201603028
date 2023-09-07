@@ -7,15 +7,18 @@ from Discos.PARTITION import Partition
 
 # Define la función fdisk que crea una partición en un archivo de disco
 def fdisk(params):
-    print("\n📁 creando partición...")
+    print("creando partición")
     # Obtiene la ruta del archivo de disco
-    filename = params.get('path')
-    current_directory = os.getcwd()
-    full_path = os.path.join(current_directory, 'discos_test', filename)
+    path_param = params.get('path').replace('"', '')
+    partes = path_param.rsplit('/', 1)
+    nombre_archivo = partes[1]
+    ruta_archivo = partes[0]
+    # Obtener el path completo del archivo
+    full_path = os.path.join(path_param)
     
     # Verifica si la ruta existe y si es así abre el archivo y lee el MBR, de lo contrario retorna un error
     if not os.path.exists(full_path):
-        print(f"Error: El archivo {full_path} no existe.")
+        print(f"Error: El disco en la ruta {full_path} no existe.")
         return
     
     # Crea una partición temporal y se verifica si se desea eliminar o agregar una partición
@@ -51,12 +54,12 @@ def fdisk(params):
             realizar = False
         elif all(item.status == 1 for item in partitions) and 'type' in params and nueva_particion.type != 'L':
             realizar = False
-            print("No se puede crear la particion, ya que todas las particiones estan ocupadas")
+            print("Particion no creada, todas las particiones estan ocupadas")
             return
         count_E = sum(1 for item in partitions if item.type == 'E')
         if count_E == 1 and nueva_particion.type == 'E':
             realizar = False
-            print("No se puede crear la particion, ya que ya existe una particion extendida")
+            print("Particion no creada, ya existe una particion extendida")
             return
         
         partitions2 = partitions
@@ -78,7 +81,7 @@ def fdisk(params):
                         ebr.next= byteinicio+EBR.SIZE+ebr.actual_size
                         #verifica si hay espacio para crear la partición
                         if ebr.next > limite_final_de_e:
-                            print("No hay espacio para crear la particion")
+                            print("No hay suficiente espacio para crear la particion")
                             return
                         file.seek(byteinicio)
                         file.write(ebr.pack())
@@ -94,7 +97,7 @@ def fdisk(params):
                         nuevo_ebr = EBR(params, ebr.start)
                         nuevo_ebr.next = nuevo_ebr.start+EBR.SIZE+nuevo_ebr.actual_size
                         if nuevo_ebr.next > limite_final_de_e:
-                            print("No hay espacio para crear la particion")
+                            print("No hay suficiente espacio para crear la particion")
                             return
                         file.seek(ebr.start)
                         file.write(nuevo_ebr.pack())
@@ -102,12 +105,12 @@ def fdisk(params):
                         file.seek(nuevo_ebr.next)
                         file.write(nuevo_nuevo_ebr.pack())
                         return
-            print(f'no existe particion extendida, error al agregar la particion logica{params.get("name") }')            
+            print(f'No existe particion extendida, error al agregar la particion logica{params.get("name")}')            
             return
         
         # Verifica si se puede agregar una partición usando la política de ajuste FF
         if nueva_particion.fit == 'FF' and realizar:
-            nueva_particion.fit = params.get('fit', 'FF').upper()
+            nueva_particion.fit = params.get('fit', 'FF').upper().replace(' ', '')
             for i, item in enumerate(partitions):   
                 if (item.status == 0 and item.name == "empty") or (item.status ==0 and space >= nueva_particion.actual_size):   
                     if i == 0:
@@ -124,7 +127,7 @@ def fdisk(params):
                         nueva_particion.byte_inicio = byteinicio
                         partitions[i] = nueva_particion
                         item = nueva_particion
-                        print(f"La partición {partitions[i]} fue creada satisfactoriamente.")
+                        print(f"La partición {partitions[i]} fue creada exitosamente.")
                         break 
             packed_objetos = b''.join([obj.pack() for obj in partitions])
             file.seek(struct.calcsize(MBR.FORMAT))
@@ -168,7 +171,7 @@ def fdisk(params):
             nueva_particion.byte_inicio = byteinicio
             partitions[indice] = nueva_particion
             print("Tamaño de particiones ", len(partitions))
-            print(f"La partición se escribió en el índice {indice}")
+            print(f"Partición escrita en el indice {indice}")
             packed_objetos = b''.join([obj.pack() for obj in partitions])
             file.seek(struct.calcsize(MBR.FORMAT))
             file.write(packed_objetos)
@@ -180,7 +183,7 @@ def fdisk(params):
             return
         # Verifica si se puede agregar una partición usando la política de ajuste WF
         elif nueva_particion.fit == 'WF' and realizar:
-            nueva_particion.fit = params.get('fit', 'FF').upper()
+            nueva_particion.fit = params.get('fit', 'FF').upper().replace(' ', '')
             max_space = -1  # Comienza con un valor negativo como centinela
             indice = -1
             for i, n in enumerate(partitions):
@@ -212,7 +215,7 @@ def fdisk(params):
                 nueva_particion.byte_inicio = byteinicio
                 partitions[indice] = nueva_particion
                 print("Tamaño de particiones ", len(partitions))
-                print(f"La partición se escribió en el índice {indice}")
+                print(f"Partición escrita en el indice {indice}")
                 packed_objetos = b''.join([obj.pack() for obj in partitions])
                 file.seek(struct.calcsize(MBR.FORMAT))
                 file.write(packed_objetos)
@@ -223,10 +226,10 @@ def fdisk(params):
                     file.write(ebr.pack())
                 return
             else:
-                print("No hay espacio disponible para la partición usando el algoritmo WF")
+                print("No hay suficiente espacio disponible para la partición usando el ajuste WF")
         # Verifica si se desea eliminar una partición
         elif 'delete' in params:
-            partition_name_to_delete = params.get('name')
+            partition_name_to_delete = params.get('name').replace('"', '')
             if not partition_name_to_delete:
                 print("Error: No se proporcionó el nombre de la partición a eliminar.")
                 return
@@ -234,9 +237,9 @@ def fdisk(params):
             for i, partition in enumerate(partitions):
                 if partition.name == partition_name_to_delete:
                     # solicita confirmación antes de eliminar la partición
-                    user_input = input(f"¿Está seguro de que desea eliminar la partición {partition_name_to_delete}? (sí/no): ")
-                    if user_input.lower() != "sí":
-                        print("Eliminación cancelada por el usuario.")
+                    user_input = input(f"¿Desea eliminar la partición {partition_name_to_delete}? (y/n): ")
+                    if user_input.lower() != "y":
+                        print("Se cancelo la acción de eliminación por el usuario.")
                         return
 
                     partition_found = True
@@ -255,7 +258,7 @@ def fdisk(params):
                     packed_objetos = b''.join([obj.pack() for obj in partitions])
                     file.seek(struct.calcsize(MBR.FORMAT))
                     file.write(packed_objetos)
-                    print(f"La partición {partition_name_to_delete} ha sido eliminada satisfactoriamente.")
+                    print(f"La partición {partition_name_to_delete} ha sido eliminada exitosamente.")
                     return
 
             if not partition_found:
@@ -264,15 +267,15 @@ def fdisk(params):
         # Verifica si se desea añadir espacio a una partición
         elif 'add' in params:
             # Obtiene el nombre de la partición a redimensionar
-            partition_name_to_resize = params.get('name')
+            partition_name_to_resize = params.get('name').replace('"', '')
             if not partition_name_to_resize:
-                print("Error: No se proporcionó el nombre de la partición para cambiar su tamaño.")
+                print("Error: No se proporcionó el nombre de la partición para modificar su tamaño.")
                 return
 
             # Obtiene el tamaño a añadir a la partición
             try:
                 additional_size = int(params['add'])
-                unit = params.get('unit', 'K').upper()  # Se establece Kilobytes como valor predeterminado si no se proporciona ninguna unidad
+                unit = params.get('unit', 'K').upper().replace(' ', '')  # Se establece Kilobytes como valor predeterminado si no se proporciona ninguna unidad
                 if unit == 'B':
                     multiplier = 1
                 elif unit == 'K':
@@ -300,7 +303,7 @@ def fdisk(params):
                     if additional_size <= free_space:
                         # Actualiza el tamaño de la partición
                         partition.actual_size += additional_size
-                        print(f"La partición {partition_name_to_resize} ha sido redimensionada satisfactoriamente.")
+                        print(f"La partición {partition_name_to_resize} ha sido redimensionada exitosamente.")
                         
                         # Actualiza la tabla de particiones en el archivo de disco
                         packed_objetos = b''.join([obj.pack() for obj in partitions])

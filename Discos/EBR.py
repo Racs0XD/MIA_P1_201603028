@@ -24,6 +24,8 @@ class EBR:
             self.actual_size = self.actual_size * 1024
         elif unit == 'M':
             self.actual_size = self.actual_size * 1024 * 1024
+        else:
+            raise ValueError(f"Parametro de unidad invalido: {unit}")
         
         # Obtiene la política de ajuste, estado, tipo, inicio, nombre y siguiente de la partición
         self.fit = params.get('fit', 'FF').upper()
@@ -34,7 +36,7 @@ class EBR:
         
         # Verifica que el nombre no esté vacío
         if not self.name:
-            raise ValueError("El nombre de la partición no puede estar vacio")
+            raise ValueError("El cambo name no debe estar vacío")
         
         self.next = -1
         
@@ -54,7 +56,7 @@ class EBR:
     # Desempaqueta los datos de la partición EBR de una cadena de bytes
     @classmethod
     def unpack(cls, data):
-        print("\n✉️  desempaquetando EBR...")
+        print("desempaquetando EBR")
         # Desempaqueta los datos de la estructura y los almacena en una tupla
         unpacked_data = struct.unpack(cls.FORMAT, data)
         

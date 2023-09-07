@@ -13,8 +13,8 @@ class MBR:
     # Constructor de la clase MBR
     def __init__(self, params):
         # Obtiene la unidad de medida y tamaño del disco
-        unit = params.get('unit', 'M').upper()
-        size = params['size']
+        unit = params.get('unit', 'M').upper().replace(' ', '')
+        size = int(params['size'])
 
         # Convierte el tamaño a bytes dependiendo de la unidad de medida
         if unit == 'K':
@@ -22,7 +22,7 @@ class MBR:
         elif unit == 'M':
             self.mbr_tamano = size * 1024 * 1024
         else:
-            raise ValueError(f"Invalid unit: {unit}")
+            raise ValueError(f"Parametro de unidad invalido: {unit}")
 
         # Obtiene la fecha y hora de creación del disco, firma y política de ajuste
         self.mbr_fecha_creacion = time.time()
@@ -35,17 +35,17 @@ class MBR:
         self.particiones = [Partition(ex), Partition(ex), Partition(ex), Partition(ex)]
         
         # Imprime la información del disco recién creado usando la librería prettytable
-        print("\n_____________________MBR CREADO__________________________________________________")
+        print("\n---------------- MBR CREADO CORRECTAMENTE ----------------\n")
         from prettytable import PrettyTable
         table = PrettyTable()
         table.field_names = ["Size", "Date", "Sig.", "Fit"]
         table.add_row([self.mbr_tamano, self.mbr_fecha_creacion, self.mbr_dsk_signature, self.fit])
         print(table)
-        print("___________________________________________________________________________________\n")
+        print("-------------------------------------------------------------\n")
         
-        # Verifica que la política de ajuste sea válida
+        # Verifica que el tipo de ajuste sea válida
         if self.fit not in ['BF', 'FF', 'WF']:
-            raise ValueError(f"Invalid fit type: {self.fit}")
+            raise ValueError(f"Tipo de ajuste invalido: {self.fit}")
         
         
     # Sobrecarga del método str para imprimir la información del MBR
@@ -68,7 +68,7 @@ class MBR:
     # Desempaqueta los datos del MBR y las particiones de una cadena de bytes
     @classmethod
     def unpack(cls, data):
-        print("\n✉️  Desempaquetando MBR...")
+        print("Desempaquetando MBR")
         # Desempaqueta los datos del MBR de la estructura y los almacena en una tupla
         unpacked_data = struct.unpack(cls.FORMAT, data[:struct.calcsize(cls.FORMAT)])
         

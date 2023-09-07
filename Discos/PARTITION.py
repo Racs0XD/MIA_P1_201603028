@@ -9,7 +9,8 @@ class Partition:
     # Constructor para la clase Partition
     def __init__(self, params):
         # Extraemos el tamaño de la partición de los parámetros
-        self.actual_size = params.get('size')
+        size_param = params.get('size')
+        self.actual_size = int(size_param)
 
         # Validamos que el tamaño sea un entero positivo mayor a cero
         if self.actual_size < 0:
