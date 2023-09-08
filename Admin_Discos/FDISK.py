@@ -4,24 +4,27 @@ import struct
 from Discos.MBR import MBR
 from Discos.EBR import EBR
 from Discos.PARTITION import Partition
-
+import difflib
 # Define la función fdisk que crea una partición en un archivo de disco
 def fdisk(params):
     print("creando partición")
     # Obtiene la ruta del archivo de disco
-    path_param = params.get('path').replace('"', '')
-    partes = path_param.rsplit('/', 1)
-    nombre_archivo = partes[1]
-    ruta_archivo = partes[0]
+    path_param = params.get('path').replace('" ', '').replace(' "', '').replace('"','').replace('.dsk ', '.dsk').replace(' /home', '/home')
+    fpath = path_param
     # Obtener el path completo del archivo
-    full_path = os.path.join(path_param)
+    a = "/home/oscar/Documentos/USAC/ARCHIVOS/MIA_P1_201603028/CD_Creado/Disco1.dsk"
+    full_path = fpath
+    #print(full_path)
+    #print("/home/oscar/Documentos/USAC/[ARCHIVOS]/MIA_P1_201603028/CD_Creado/Disco4.dsk")
+    
+    
     
     # Verifica si la ruta existe y si es así abre el archivo y lee el MBR, de lo contrario retorna un error
     if not os.path.exists(full_path):
         print(f"Error: El disco en la ruta {full_path} no existe.")
         return
     
-    # Crea una partición temporal y se verifica si se desea eliminar o agregar una partición
+  # Crea una partición temporal y se verifica si se desea eliminar o agregar una partición
     ex = {'size': 10, 'path': 'path', 'name': 'empty'}
     nueva_particion = None
     if 'delete' in params or 'add' in params:

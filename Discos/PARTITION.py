@@ -17,12 +17,12 @@ class Partition:
             raise ValueError("El tamaño debe ser un entero positivo mayor a cero")
 
         # Extraemos el nombre de la partición de los parámetros y validamos que no esté vacío
-        self.name = params.get('name')
+        self.name = params.get('name').replace('"', '')
         if not self.name:
             raise ValueError("El nombre de la partición no puede estar vacío")
 
         # Extraemos la unidad de los parámetros; si no se proporciona, se usa la unidad "K"
-        self.unit = params.get('unit', 'K').upper()
+        self.unit = params.get('unit', 'K').upper().replace(' ', '')
         if self.unit not in ['B', 'K', 'M']:
             raise ValueError(f"Unidad inválida: {self.unit}")
 
@@ -35,13 +35,13 @@ class Partition:
             self.actual_size = self.actual_size * 1024 * 1024
         
         # Extraemos el tipo de la partición de los parámetros, si no se proporciona, se usa el tipo "P"
-        self.type = params.get('type', 'P').upper()
+        self.type = params.get('type', 'P').upper().replace(' ', '')
         
         # Se inicializa el status en 0, lo que significa que la partición no está ocupada
         self.status = 0
         
         # Se extrae el parámetro fit, que indica el método de ajuste de la partición dentro del disco (por defecto, "FF")
-        self.fit = params.get('fit', 'FF').upper()
+        self.fit = params.get('fit', 'FF').upper().replace(' ', '')
         
         # Para uso interno, se inicializa la variable que indica la posición de la partición dentro del disco en 0
         self.byte_inicio = 0

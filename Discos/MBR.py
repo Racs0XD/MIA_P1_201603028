@@ -27,7 +27,7 @@ class MBR:
         # Obtiene la fecha y hora de creación del disco, firma y política de ajuste
         self.mbr_fecha_creacion = time.time()
         self.mbr_dsk_signature = random.randint(1, 1000000)
-        self.fit = params.get('fit', 'FF').upper()
+        self.fit = params.get('fit', 'FF').upper().replace(' ', '')
         
         # Crea un diccionario con valores aleatorios para crear las particiones
         ex = {'size': 10, 'path': 'path', 'name': 'empty'}

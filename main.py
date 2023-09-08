@@ -9,6 +9,7 @@ def validar_comando(comando):
     comando_separado = comando.split('-')
     cmd = comando_separado[0].replace(' ', '').lower() # Obtenemos el comando
     # Verificar si es el comando mkdisk
+    
     if cmd == "mkdisk":
         argumentos = comando_separado[1:] # Obtenemos los argumentos
         # Convertir los argumentos en un diccionario
@@ -52,7 +53,9 @@ def validar_comando(comando):
             print("Error: los parametros size, path y name son obligatorios para el comando fdisk")
             return
         else:
-            fdisk(parametros)    
+            fdisk(parametros)   
+    elif cmd == "exit":
+        exit()
 
     else:
         print("Error: comando no reconocido.")
