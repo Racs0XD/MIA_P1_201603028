@@ -11,12 +11,9 @@ def fdisk(params):
     # Obtiene la ruta del archivo de disco
     path_param = params.get('path').replace('" ', '').replace(' "', '').replace('"','').replace('.dsk ', '.dsk').replace(' /home', '/home')
     fpath = path_param
-    partes = path_param.rsplit('/', 1)
-    nombre_archivo = partes[1]
-    ruta_darchivo = partes[0]
     # Obtener el path completo del archivo
     full_path = fpath
-
+ 
     # Verifica si la ruta existe y si es así abre el archivo y lee el MBR, de lo contrario retorna un error
     if not os.path.exists(full_path):
         print(f"Error: El disco en la ruta {full_path} no existe.")

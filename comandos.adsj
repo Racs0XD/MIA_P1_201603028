@@ -12,3 +12,4 @@ fdisk -size=1 -type=P -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk
 fdisk -size=1 -type=L -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=acaandamos -fit=FF 
 fdisk -size=1 -type=L -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=acanosfuimos -fit=FF 
 fdisk -size=1 -type=L -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=acanosreimos -fit=FF 
+mount -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=acanosreimos

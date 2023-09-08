@@ -1,7 +1,14 @@
 from Admin_Discos.FDISK import fdisk
 from Admin_Discos.MKDISK import mkdisk
 from Admin_Discos.RMDISK import rmdisk
+from Admin_Discos.MOUNT import mount
+from Admin_Discos.UNMOUNT import unmount
 import re
+
+#Se definen las variables globales
+particiones_montadas = []
+usuarios = None
+particion_actual = None
 
 def execute(comando):
     # Obtener el path del archivo
@@ -71,6 +78,37 @@ def validar_comando(comando):
             return
         else:
             fdisk(parametros)   
+
+    elif cmd == "mount":
+        argumentos = comando_separado[1:]
+        # Convertir los argumentos en un diccionario
+        parametros = {}
+        for arg in argumentos:
+            key, value = arg.split('=')
+            parametros[key.lower()] = value
+
+        # Validar los parametros recibidos
+        if "path" not in parametros or "name" not in parametros:
+            print("Error: los parametros path y name son obligatorios para el comando mount")
+            return
+        else:
+            mount(parametros, particiones_montadas)
+    
+    elif cmd == "unmount":
+        argumentos = comando_separado[1:]
+        # Convertir los argumentos en un diccionario
+        parametros = {}
+        for arg in argumentos:
+            key, value = arg.split('=')
+            parametros[key.lower()] = value
+
+        # Validar los parametros recibidos
+        if "id" not in parametros:
+            print("Error: el parametro id es obligatorio para el comando unmount")
+            return
+        else:
+            unmount(parametros, particiones_montadas)
+
     elif cmd == "exit":
         exit()
 

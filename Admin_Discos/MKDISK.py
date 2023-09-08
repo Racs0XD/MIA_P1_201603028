@@ -7,7 +7,7 @@ def mkdisk(params):
     # Extraer los parámetros con valores predeterminados si no se han proporcionado
     size_param = params.get('size').replace(' ', '')
     size = int(size_param)
-    path_param = params.get('path').replace('"', '')
+    path_param = params.get('path').replace('"', '').replace('.dsk ', '.dsk')
     unit = params.get('unit', 'M').replace(' ', '')
     fit = params.get('fit', 'FF').replace(' ', '')
 
