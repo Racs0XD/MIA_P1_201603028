@@ -3,6 +3,23 @@ from Admin_Discos.MKDISK import mkdisk
 from Admin_Discos.RMDISK import rmdisk
 import re
 
+def execute(comando):
+    # Obtener el path del archivo
+    path = re.search(r'(?<=-path=).*', comando).group(0)
+    # Validar que el archivo tenga la extensión adecuada
+    print(path)
+    if not path.endswith(".adsj"):
+        print("Error: El archivo debe tener extensión .adsj")
+        return
+    try:
+        # Abrir el archivo
+        with open(path, 'r') as file:
+            # Leer el archivo linea por linea
+            for line in file:
+                # Eliminar los saltos de linea y validar el comando
+                validar_comando(line.strip())
+    except FileNotFoundError:
+        print("Error: El archivo especificado no existe")
 
 def validar_comando(comando):
     # Separar el comando y los argumentos
@@ -60,12 +77,13 @@ def validar_comando(comando):
     else:
         print("Error: comando no reconocido.")
 
-
 def main():
     while True:
             command = input("Ingrese el comando: ")
-            validar_comando(command)
-    
+            if command.startswith('execute'):
+                execute(command)
+            else:
+                validar_comando(command)
 
 if __name__ == "__main__":
     main()

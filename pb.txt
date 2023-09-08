@@ -1,3 +1,5 @@
+
+G:\Documentos\USAC\ARCHIVOS\MIA_P1_201603028\Discos
 MKDISK -size=3000 -unit=K -PATH=/home/oscar/Documentos/USAC/ARCHIVOS/MIA_P1_201603028/CD_Creado/Disco1.dsk
 mkdisk -path=/home/oscar/Documentos/USAC/ARCHIVOS/MIA_P1_201603028/CD_Creado/Disco1.dsk
 

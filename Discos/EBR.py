@@ -10,8 +10,9 @@ class EBR:
     # Constructor de la clase EBR
     def __init__(self, params, start):
         # Obtiene la unidad de medida y el tamaño de la partición
-        unit = params.get('unit', 'M').upper()
-        self.actual_size = params.get('size')
+        unit = params.get('unit', 'M').upper().replace(' ', '')
+        self.actual_size = int(params.get('size'))
+
         
         # Verifica que el tamaño sea un entero positivo mayor que cero
         if self.actual_size < 0:
@@ -28,11 +29,11 @@ class EBR:
             raise ValueError(f"Parametro de unidad invalido: {unit}")
         
         # Obtiene la política de ajuste, estado, tipo, inicio, nombre y siguiente de la partición
-        self.fit = params.get('fit', 'FF').upper()
+        self.fit = params.get('fit', 'FF').upper().replace(' ', '')
         self.status = 0
-        self.type = params.get('type','L').upper()
+        self.type = params.get('type','L').upper().replace(' ', '')
         self.start = start
-        self.name = params.get('name')
+        self.name = params.get('name').replace('"', '')
         
         # Verifica que el nombre no esté vacío
         if not self.name:
