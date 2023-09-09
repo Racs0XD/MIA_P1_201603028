@@ -4,7 +4,7 @@ import struct
 from Discos.MBR import MBR
 from Discos.EBR import EBR
 from Discos.PARTITION import Partition
-import difflib
+
 # Define la función fdisk que crea una partición en un archivo de disco
 def fdisk(params):
     print("creando partición")

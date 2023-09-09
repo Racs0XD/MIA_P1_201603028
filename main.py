@@ -32,6 +32,7 @@ def execute(comando):
         print("Error: El archivo especificado no existe")
 
 def validar_comando(comando):
+    global usuarios
     # Separar el comando y los argumentos
     comando_separado = comando.split('-')
     cmd = comando_separado[0].replace(' ', '').lower() # Obtenemos el comando
@@ -125,7 +126,7 @@ def validar_comando(comando):
             print("Error: el parametro id es obligatorio para el comando mkfs")
             return
         else:
-            mkfs(parametros, particiones_montadas)
+            mkfs(parametros, particiones_montadas,usuarios)
 
     elif cmd == "login":
         argumentos = comando_separado[1:]
@@ -140,12 +141,10 @@ def validar_comando(comando):
             print("Error: los parametros user, pass e id son obligatorios para el comando login")
             return
         else:
-            global usuarios
             global particion_actual
             usuarios, particion_actual = login(parametros, particiones_montadas)
     
     elif cmd == "logout":
-        global usuarios
         logout_users = {}
         if usuarios is not None:
             logout_users = usuarios
@@ -164,7 +163,7 @@ def validar_comando(comando):
 def main():
     while True:
             command = input("Ingrese el comando: ")
-            if command.startswith('execute'):
+            if command.startswith('exec'):
                 execute(command)
             else:
                 validar_comando(command)

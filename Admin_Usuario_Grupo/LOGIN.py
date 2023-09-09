@@ -1,5 +1,9 @@
+# Importar módulos necesarios
 import os
-from Sistema_Archivos.EXT2 import Superblock, Inode, FolderBlock, FileBlock
+from Estructuras.SUPER_BLOCK import Superblock
+from Estructuras.INODE import Inode
+from Estructuras.FOLDER_BLOCK import FolderBlock
+from Estructuras.FILE_BLOCK import FileBlock
 from Admin_Usuario_Grupo.GESTOR_USER_GROUP import parse_users, get_user_if_authenticated
 
 # Función para iniciar sesión en el sistema de archivos EXT2.
@@ -33,13 +37,11 @@ def login(params, mounted_partitions):
     path = partition['path']
     inicio = partition['inicio']
     size = partition['size']
-    filename = path
-    current_directory = os.getcwd()
-    full_path= f'{current_directory}/discos_test{filename}'
+    full_path= path
 
     # Verificar que exista el archivo de la partición
     if not os.path.exists(full_path):
-        print(f"Error: El archivo {full_path} no existe.")
+        print(f"Error: El archivo en la ruta {full_path} no existe.")
         return
 
     # Leer los datos del archivo de la partición

@@ -7,7 +7,6 @@ def rmdisk(params):
     path_param = params.get('path').replace('"', '')
     partes = path_param.rsplit('/', 1)
     nombre_archivo = partes[1]
-    ruta_archivo = partes[0]
     
     # Obtener el path completo del archivo
     full_path = os.path.join(path_param)

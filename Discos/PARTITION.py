@@ -17,7 +17,7 @@ class Partition:
             raise ValueError("El tamaño debe ser un entero positivo mayor a cero")
 
         # Extraemos el nombre de la partición de los parámetros y validamos que no esté vacío
-        self.name = params.get('name').replace('"', '')
+        self.name = params.get('name').replace('"', '').replace(' ', '')
         if not self.name:
             raise ValueError("El nombre de la partición no puede estar vacío")
 

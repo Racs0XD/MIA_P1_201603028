@@ -49,6 +49,18 @@ fdisk -add=500 -size=10 -unit=K -path="/home/oscar/MIA_P1_201603028/CDCD Creado/
 fdisk -add=1 -unit=M -PATH=/home/oscar/MIA_P1_201603028/CD_Creado/Disco1.dsk -name="Particion4"
 
 
+Ejemplos:
+#Monta las particiones de Disco1.dsk, Disco2.dsk y Disco3.dsk,
+#Canet Ejemplo -> 201404106
+mount -path=/home/oscar/MIA_P1_201603028/CD_Creado/Disco1.dsk -name=Particion1 #id=061Disco1
+mount -path=/home/Disco2.dsk -name=Part1 #id=061Disco2
+mount -name=Part2 -path=/home/Disco3.dsk #id=061Disco3
+mount -path=/home/Disco1.dsk -name=Part2 #id=062Disco1
+mount -path=/home/Disco2.dsk -name=Part2 #id=062Disco2
+mount -name=Part3 -path=/home/Disco3.dsk #id=062Disco3
+#Desmonta la partición con id 061Disco1(En Disco1.dsk)
+unmount -id=281Disco1
+
 fdisk -size=300 -path=/home/oscar/MIA_P1_201603028/CD_Creado/Disco4.dsk -name=Particion1
 
 
