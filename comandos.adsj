@@ -1,15 +1,15 @@
 mkdisk -size=100 -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -unit=M -fit=WF
 fdisk -size=10 -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=laprimera -type=P
-fdisk -size=100 -type=E -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=lasegunda -fit=BF 
-fdisk -size=10 -type=P -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=latercera -fit=WF 
-fdisk -size=300 -type=P -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=lacuarta -fit=FF 
-fdisk -size=10 -type=P -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=laquinta -fit=BF 
-fdisk -name=lasegunda -delete=full -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" 
-fdisk -name=lacuarta -delete=full -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" 
-fdisk -size=90 -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=laacomodada -fit=WF 
-fdisk -add=100 -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=laprimera
-fdisk -size=1 -type=P -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=laquenoentra -fit=FF 
-fdisk -size=1 -type=L -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=acaandamos -fit=FF 
-fdisk -size=1 -type=L -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=acanosfuimos -fit=FF 
-fdisk -size=1 -type=L -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=acanosreimos -fit=FF 
-mount -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=acanosreimos
+#fdisk -size=100 -type=E -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=lasegunda -fit=BF 
+#fdisk -size=10 -type=P -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=latercera -fit=WF 
+#fdisk -size=300 -type=P -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=lacuarta -fit=FF 
+#fdisk -size=10 -type=P -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=laquinta -fit=BF 
+#fdisk -name=lasegunda -delete=full -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" 
+#fdisk -name=lacuarta -delete=full -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" 
+#fdisk -size=90 -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=laacomodada -fit=WF 
+#fdisk -add=100 -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=laprimera
+#fdisk -size=1 -type=P -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=laquenoentra -fit=FF 
+#fdisk -size=1 -type=L -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=acaandamos -fit=FF 
+#fdisk -size=1 -type=L -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=acanosfuimos -fit=FF 
+#fdisk -size=1 -type=L -unit=K -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=acanosreimos -fit=FF 
+mount -path="/home/oscar/MIA_P1_201603028/CD/DiscoPB.dsk" -name=laprimera

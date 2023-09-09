@@ -80,3 +80,4 @@ fdisk -size=1 -type=L -unit=K -path=/home/oscar/MIA_P1_201603028/CD_Creado/Disco
 '''
 
 
+execute -path=/home/oscar/MIA_P1_201603028/comandos.adsj

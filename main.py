@@ -23,8 +23,9 @@ def execute(comando):
         with open(path, 'r') as file:
             # Leer el archivo linea por linea
             for line in file:
-                # Eliminar los saltos de linea y validar el comando
-                validar_comando(line.strip())
+                # Eliminar los saltos de linea, los comentarios y validar el comando                
+                if '#' not in line:
+                    validar_comando(line.strip())
     except FileNotFoundError:
         print("Error: El archivo especificado no existe")
 

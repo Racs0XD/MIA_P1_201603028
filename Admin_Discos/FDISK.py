@@ -227,7 +227,7 @@ def fdisk(params):
                 print("No hay suficiente espacio disponible para la partición usando el ajuste WF")
         # Verifica si se desea eliminar una partición
         elif 'delete' in params:
-            partition_name_to_delete = params.get('name').replace('"', '')
+            partition_name_to_delete = params.get('name').replace('"', '').replace(' ', '')
             if not partition_name_to_delete:
                 print("Error: No se proporcionó el nombre de la partición a eliminar.")
                 return
@@ -265,7 +265,7 @@ def fdisk(params):
         # Verifica si se desea añadir espacio a una partición
         elif 'add' in params:
             # Obtiene el nombre de la partición a redimensionar
-            partition_name_to_resize = params.get('name').replace('"', '')
+            partition_name_to_resize = params.get('name').replace('"', '').replace(' ', '')
             if not partition_name_to_resize:
                 print("Error: No se proporcionó el nombre de la partición para modificar su tamaño.")
                 return
