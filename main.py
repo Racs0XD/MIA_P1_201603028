@@ -3,6 +3,8 @@ from Admin_Discos.MKDISK import mkdisk
 from Admin_Discos.RMDISK import rmdisk
 from Admin_Discos.MOUNT import mount
 from Admin_Discos.UNMOUNT import unmount
+from Admin_Discos.MKFS import mkfs
+from Admin_Usuario_Grupo.LOGIN import login
 import re
 
 #Se definen las variables globales
@@ -109,6 +111,49 @@ def validar_comando(comando):
             return
         else:
             unmount(parametros, particiones_montadas)
+
+    elif cmd == "mkfs":
+        argumentos = comando_separado[1:]
+        # Convertir los argumentos en un diccionario
+        parametros = {}
+        for arg in argumentos:
+            key, value = arg.split('=')
+            parametros[key.lower()] = value
+        
+        # Validar los parametros recibidos
+        if "id" not in parametros:
+            print("Error: el parametro id es obligatorio para el comando mkfs")
+            return
+        else:
+            mkfs(parametros, particiones_montadas)
+
+    elif cmd == "login":
+        argumentos = comando_separado[1:]
+        # Convertir los argumentos en un diccionario
+        parametros = {}
+        for arg in argumentos:
+            key, value = arg.split('=')
+            parametros[key.lower()] = value
+        
+        # Validar los parametros recibidos
+        if "user" not in parametros or "pass" not in parametros or "id" not in parametros:
+            print("Error: los parametros user, pass e id son obligatorios para el comando login")
+            return
+        else:
+            global usuarios
+            global particion_actual
+            usuarios, particion_actual = login(parametros, particiones_montadas)
+    
+    elif cmd == "logout":
+        global usuarios
+        logout_users = {}
+        if usuarios is not None:
+            logout_users = usuarios
+            usuarios = None
+        else:
+            print("No hay usuarios logueados")
+        result = ('logout', logout_users)
+        return result              
 
     elif cmd == "exit":
         exit()
