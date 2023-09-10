@@ -21,7 +21,6 @@ class FileBlock:
     # Método para desempaquetar una cadena de bytes y construir una estructura FileBlock
     @classmethod
     def unpack(cls, data):
-        print("Data length:", len(data))
         unpacked_data = struct.unpack(cls.FORMAT, data)
         fileblock = cls()
         fileblock.b_content = unpacked_data[0].decode('utf-8')

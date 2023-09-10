@@ -1,18 +1,29 @@
 mkdisk -size=3000 -unit=K -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk
+
 fdisk -size=300 -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -name=Particion1
 fdisk -type=E -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -unit=K -name=Particion2 -size=300
-fdisk -size=1 -type=L -unit=M -fit=bf -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -name="Particion3"
-fdisk -type=E -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -name=Part3 -unit=K -size=200
-fdisk -delete=full -name="Particion1" -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk
-fdisk -name=Particion1 -delete=full -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk
-fdisk -add=500 -size=10 -unit=K -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -name=”Particion4”
-fdisk -add=1 -unit=M -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -name="Particion4"
+#fdisk -size=1 -type=L -unit=M -fit=bf -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -name="Particion3"
+#fdisk -type=E -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -name=Part3 -unit=K -size=200
+#fdisk -delete=full -name="Particion1" -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk
+#fdisk -name=Particion1 -delete=full -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk
+#fdisk -add=500 -size=10 -unit=K -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -name=”Particion4”
+#fdisk -add=1 -unit=M -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -name="Particion4"
 mount -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -name=Particion1
-unmount -id=281Disco1
+#unmount -id=281Disco1
 mount -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -name=Particion2
-mount -name=Particion1 -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk
+#mount -name=Particion1 -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk
 mkfs -type=full -id=281Disco1
 mkfs -type=full -id=282Disco1 -fs=3fs
 
-login -user=root -pass=123 -id=061Disco1
-login -user="usuario" -pass="pass123" -id=281Disco1
+pause
+login -user=root -pass=123 -id=281Disco1
+#login -user="usuario" -pass="pass123" -id=281Disco1
+#mkusr -user=user1 -pass=usuario -grp=root
+#mkusr -user=user1 -pass=usuario -grp=root
+#mkusr -user=user2 -pass=usuario -grp=root
+#mkusr -user=user3 -pass=usuario -grp=root
+#mkusr -user=user4 -pass=usuario -grp=root
+#mkusr -user=user5 -pass=usuario -grp=root
+#mkgrp -name=usuarios
+
+#exec -path=/home/oscar/MIA_P1_201603028/comandos.adsj

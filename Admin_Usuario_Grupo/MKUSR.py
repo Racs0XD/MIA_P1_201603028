@@ -9,7 +9,7 @@ from Admin_Usuario_Grupo.GESTOR_USER_GROUP import extract_active_groups, parse_u
 
 # Función para crear un nuevo usuario.
 def mkusr(params, mounted_partitions, id):
-    print("================== MKUSR ==================")
+    print("===================== MKUSR =====================")
     if id == None:
         print("Error: Se requiere del id.")
         return

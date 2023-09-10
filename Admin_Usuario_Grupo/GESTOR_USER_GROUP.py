@@ -59,12 +59,12 @@ def parse_users(texto):
 
 #Funcion para obtener un usuario si está autenticado
 def get_user_if_authenticated(usuarios, user, password):
-    print(f'buscando a {user} con password {password} en {usuarios}')
     # Recorre cada usuario en la lista de usuarios
     for user_data in usuarios:
         if user in user_data:
             # Usuario encontrado
             if user_data[user]['password'] == password:
+                
                 # La contraseña coincide
                 return user_data[user]
     # El usuario no se encontró o la contraseña no coincide

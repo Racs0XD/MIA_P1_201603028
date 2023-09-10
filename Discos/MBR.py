@@ -35,13 +35,15 @@ class MBR:
         self.particiones = [Partition(ex), Partition(ex), Partition(ex), Partition(ex)]
         
         # Imprime la información del disco recién creado usando la librería prettytable
-        print("\n---------------- MBR CREADO CORRECTAMENTE ----------------\n")
+        print("=================================================")
+        print("================== MBR CREADO  ==================")
+        print("=================================================")
         from prettytable import PrettyTable
         table = PrettyTable()
         table.field_names = ["Size", "Date", "Sig.", "Fit"]
         table.add_row([self.mbr_tamano, self.mbr_fecha_creacion, self.mbr_dsk_signature, self.fit])
         print(table)
-        print("-------------------------------------------------------------\n")
+        print("=================================================\n")
         
         # Verifica que el tipo de ajuste sea válida
         if self.fit not in ['BF', 'FF', 'WF']:
@@ -67,8 +69,8 @@ class MBR:
 
     # Desempaqueta los datos del MBR y las particiones de una cadena de bytes
     @classmethod
-    def unpack(cls, data):
-        print("Desempaquetando MBR")
+    def unpack(cls, data):        
+        print("Desempaquetado de MBR\n")
         # Desempaqueta los datos del MBR de la estructura y los almacena en una tupla
         unpacked_data = struct.unpack(cls.FORMAT, data[:struct.calcsize(cls.FORMAT)])
         

@@ -76,10 +76,7 @@ def mkgrp(params, mounted_partitions, id):
             print(f"Error: El grupo {group} ya existe.")
             return
 
-        #print("ESTE ES EL GRUPO QUE SE VA A CREAR")
-        #print(group)
-        #print(grupos)
-        
+        # Obtenemos el ID más alto de los grupos existentes
         max_id = max(g['id'] for g in grupos)
         # El siguiente ID disponible será max_id + 1
         next_id = max_id + 1

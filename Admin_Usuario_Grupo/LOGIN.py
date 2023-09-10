@@ -8,15 +8,13 @@ from Admin_Usuario_Grupo.GESTOR_USER_GROUP import parse_users, get_user_if_authe
 
 # Función para iniciar sesión en el sistema de archivos EXT2.
 def login(params, mounted_partitions):
-
-    print("============ Bienvenido al Login ============")
-    print(params)
-
+    print("=================================================")
+    print("============== Bienvenido al Login ==============")
     # Verificar que existan los parámetros de usuario y contraseña
     try:
-        user = params['user']
-        password = params['pass']
-        id = params['id']
+        user = params['user'].replace(' ', '')
+        password = params['pass'].replace(' ', '')
+        id = params['id'].replace(' ', '')
         
     except:
         print("Error: se requieren el usuario y la contraseña.")
@@ -66,11 +64,9 @@ def login(params, mounted_partitions):
 
     # Autenticar al usuario y realizar el inicio de sesión
     usuarios = parse_users(texto)
-    users= get_user_if_authenticated(usuarios, user, password)
-    if users:
-        print("Usuario autenticado: ")
-        print(users)
-        return users,id
-    else:
-        print("Acceso denegado")   
-        return None, None
+    users = get_user_if_authenticated(usuarios, user, password)
+    print("=================================================")
+    print("Usuario autenticado: ")
+    print(users)
+    print("=================================================")
+    return users,id

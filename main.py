@@ -5,6 +5,10 @@ from Admin_Discos.MOUNT import mount
 from Admin_Discos.UNMOUNT import unmount
 from Admin_Discos.MKFS import mkfs
 from Admin_Usuario_Grupo.LOGIN import login
+from Admin_Usuario_Grupo.MKGRP import mkgrp
+from Admin_Usuario_Grupo.RMGRP import rmgrp
+from Admin_Usuario_Grupo.MKUSR import mkusr
+from Admin_Usuario_Grupo.RMUSR import rmusr
 import re
 
 #Se definen las variables globales
@@ -25,9 +29,15 @@ def execute(comando):
         with open(path, 'r') as file:
             # Leer el archivo linea por linea
             for line in file:
-                # Eliminar los saltos de linea, los comentarios y validar el comando                
+                # Eliminar los saltos de linea, los comentarios y validar el comando
+                line = line.strip()
+                if not line or line.isspace():  # Ignorar líneas en blanco o con solo espacios
+                    continue
                 if '#' not in line:
-                    validar_comando(line.strip())
+                    if line == "pause":
+                        input("Presione enter para continuar...\n")
+                    else:
+                        validar_comando(line)
     except FileNotFoundError:
         print("Error: El archivo especificado no existe")
 
@@ -153,6 +163,78 @@ def validar_comando(comando):
             print("No hay usuarios logueados")
         result = ('logout', logout_users)
         return result              
+    
+    elif cmd == "mkgrp":
+        argumentos = comando_separado[1:]
+        # Convertir los argumentos en un diccionario
+        parametros = {}
+        for arg in argumentos:
+            key, value = arg.split('=')
+            parametros[key.lower()] = value
+        
+        # Validar los parametros recibidos
+        if "name" not in parametros:
+            print("Error: el parametro name es obligatorio para el comando mkgrp")
+            return
+        else:
+            if usuarios is not None:
+                usuarios = mkgrp(parametros, usuarios)
+            else:
+                print("No hay usuarios logueados")
+    
+    elif cmd == "rmgrp":
+        argumentos = comando_separado[1:]
+        # Convertir los argumentos en un diccionario
+        parametros = {}
+        for arg in argumentos:
+            key, value = arg.split('=')
+            parametros[key.lower()] = value
+        
+        # Validar los parametros recibidos
+        if "name" not in parametros:
+            print("Error: el parametro name es obligatorio para el comando rmgrp")
+            return
+        else:
+            if usuarios is not None:
+                usuarios = rmgrp(parametros, usuarios)
+            else:
+                print("No hay usuarios logueados")
+    
+    elif cmd == "mkusr":
+        argumentos = comando_separado[1:]
+        # Convertir los argumentos en un diccionario
+        parametros = {}
+        for arg in argumentos:
+            key, value = arg.split('=')
+            parametros[key.lower()] = value
+        
+        # Validar los parametros recibidos
+        if "user" not in parametros or "pass" not in parametros or "grp" not in parametros:
+            print("Error: los parametros user, pass y grp son obligatorios para el comando mkusr")
+            return
+        else:
+            if usuarios is not None and usuarios['username'] == 'root':
+                usuarios = mkusr(parametros, particiones_montadas, particion_actual)
+            else:
+                print("No hay usuarios logueados")
+
+    elif cmd == "rmusr":
+        argumentos = comando_separado[1:]
+        # Convertir los argumentos en un diccionario
+        parametros = {}
+        for arg in argumentos:
+            key, value = arg.split('=')
+            parametros[key.lower()] = value
+        
+        # Validar los parametros recibidos
+        if "user" not in parametros:
+            print("Error: el parametro user es obligatorio para el comando rmusr")
+            return
+        else:
+            if usuarios is not None:
+                usuarios = rmusr(parametros, usuarios)
+            else:
+                print("No hay usuarios logueados")
 
     elif cmd == "exit":
         exit()
