@@ -7,14 +7,15 @@ from Estructuras.FILE_BLOCK import FileBlock
 from Admin_Usuario_Grupo.GESTOR_USER_GROUP import parse_users, get_user_if_authenticated
 
 # Función para iniciar sesión en el sistema de archivos EXT2.
-def login(params, mounted_partitions):
+def login(parametros, particiones_montadas):
     print("=================================================")
     print("============== Bienvenido al Login ==============")
+    print("=================================================")
     # Verificar que existan los parámetros de usuario y contraseña
     try:
-        user = params['user'].replace(' ', '')
-        password = params['pass'].replace(' ', '')
-        id = params['id'].replace(' ', '')
+        user = parametros['user'].replace(' ', '')
+        password = parametros['pass'].replace(' ', '')
+        id = parametros['id'].replace(' ', '')
         
     except:
         print("Error: se requieren el usuario y la contraseña.")
@@ -22,7 +23,7 @@ def login(params, mounted_partitions):
 
     # Buscar la partición montada por su identificador
     partition = None
-    for partition_dict in mounted_partitions:
+    for partition_dict in particiones_montadas:
         if id in partition_dict:
             partition = partition_dict[id]
             break

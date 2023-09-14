@@ -18,12 +18,14 @@ mkfs -type=full -id=282Disco1 -fs=3fs
 pause
 login -user=root -pass=123 -id=281Disco1
 #login -user="usuario" -pass="pass123" -id=281Disco1
-#mkusr -user=user1 -pass=usuario -grp=root
-#mkusr -user=user1 -pass=usuario -grp=root
-#mkusr -user=user2 -pass=usuario -grp=root
-#mkusr -user=user3 -pass=usuario -grp=root
-#mkusr -user=user4 -pass=usuario -grp=root
-#mkusr -user=user5 -pass=usuario -grp=root
-#mkgrp -name=usuarios
+mkusr -user=user1 -pass=usuario -grp=root
+mkusr -user=user2 -pass=usuario -grp=root
+mkusr -user=user3 -pass=usuario -grp=root
+mkusr -user=user4 -pass=usuario -grp=root
+mkusr -user=user5 -pass=usuario -grp=root
+mkgrp -name=usuarios
+
+rmgrp -name=usuarios
+rmusr -user=user3
 
 #exec -path=/home/oscar/MIA_P1_201603028/comandos.adsj

@@ -8,19 +8,21 @@ from Estructuras.FILE_BLOCK import FileBlock
 from Admin_Usuario_Grupo.GESTOR_USER_GROUP import extract_active_groups
 
 # Función para crear un nuevo grupo
-def mkgrp(params, mounted_partitions, id):
-    print("================== MKGRP ==================")
+def mkgrp(parametros, particiones_montadas, id):
+    print("===================== MKGRP =====================")
+    print("============ Creando un nuevo grupo =============")
+    print("=================================================")
     if id == None:
         print("Error: Se requiere del id.")
         return
     try: 
-        group = params['name']
+        group = parametros['name'].replace(' ', '')
     except:
         print("Error: Se requiere el nombre del grupo.")
         return
     
     partition = None
-    for partition_dict in mounted_partitions:
+    for partition_dict in particiones_montadas:
         if id in partition_dict:
             partition = partition_dict[id]
             break
@@ -34,10 +36,13 @@ def mkgrp(params, mounted_partitions, id):
     inicio = partition['inicio']
     size = partition['size']
     full_path = path
+    
+     # Si el archivo del disco no existe, se devuelve un error.
     if not os.path.exists(full_path):
-        print(f"Error: El archivo en la ruta {full_path} no existe.")
+        print(f"Error: El archivo {full_path} no existe.")
         return
-        
+
+    # Se lee el superbloque e inode para encontrar la ubicación del bloque de grupo
     with open(full_path, "rb+") as file:
         file.seek(inicio)
         superblock = Superblock.unpack(file.read(Superblock.SIZE))
@@ -48,10 +53,13 @@ def mkgrp(params, mounted_partitions, id):
         folder = FolderBlock.unpack(file.read(FolderBlock.SIZE))
         siguiente = folder.b_content[0].b_inodo
         file.seek(siguiente)
+        ubicacion_inodo_users = siguiente
         inodo = Inode.unpack(file.read(Inode.SIZE))
         primerbloque = -1
         cont = 0
         texto = ""
+
+        # Se lee el contenido de los bloques de archivo para obtener la información de los grupos
         for i,item in enumerate(inodo.i_block[:12]):
             if item != -1 and i == 0:
                 primerbloque = item
@@ -61,34 +69,42 @@ def mkgrp(params, mounted_partitions, id):
                 file.seek(siguiente)
                 fileblock = FileBlock.unpack(file.read(FileBlock.SIZE))
                 texto += fileblock.b_content.rstrip('\x00')
+
+        # Se extraen los grupos activos del texto
         indice_a_borrar = (primerbloque- superblock.s_block_start)//64   
         grupos = extract_active_groups(texto)
-       
-        group_exists = False  # Inicialmente, asumimos que el grupo no existe aún
-       
+        group_exists = False  # Inicialmente, asumimos que el grupo no existe
+
+        # Se verifica si el grupo existe
         for n in grupos:
-            # Comprobamos si el grupo ya existe en este objeto
             if n['groupname'] == group:
                 group_exists = True
                 break
 
+        # Si el grupo ya existe, se devuelve un error.
         if group_exists==True:
             print(f"Error: El grupo {group} ya existe.")
             return
 
-        # Obtenemos el ID más alto de los grupos existentes
+        # Se muestra en pantalla el grupo que se va a crear
+        print("ESTE ES EL GRUPO QUE SE VA A CREAR")
+        print(group)
+        print(grupos)
+
+        # Se determina el siguiente ID disponible para el nuevo grupo
         max_id = max(g['id'] for g in grupos)
-        # El siguiente ID disponible será max_id + 1
         next_id = max_id + 1
-    
+
+        # Se agrega el nuevo grupo al contenido del bloque de archivo
         texto += f'{next_id},G,{group}\n'
-        
+
+        # Se establece la cantidad de bloques necesarios para el contenido del archivo
         length = len(texto)
         fileblocks = length//64
         if length%64 != 0:
             fileblocks += 1
-        
-        # Obtenemos el mapa de bits de bloques y buscamos su primer aparición de la cantidad de bloques requerida
+
+        # Se actualiza el bitmap y se asignan los bloques necesarios al contenido del archivo
         bitmap_bloques_inicio = superblock.s_bm_block_start
         cantidad_bloques = superblock.s_blocks_count
         FORMAT = f'{cantidad_bloques}s'
@@ -96,14 +112,14 @@ def mkgrp(params, mounted_partitions, id):
         file.seek(bitmap_bloques_inicio)
         bitmap_bloques = struct.unpack(FORMAT, file.read(SIZE))
         bitmap=bitmap_bloques[0].decode('utf-8')
-        
-        if fileblocks <= 12:
+                    
+        if fileblocks<=12:
             bitmap = bitmap[:indice_a_borrar] + '0'*cont + bitmap[indice_a_borrar+cont:]
             index = bitmap.find('0'*fileblocks)
-            #print(bitmap)
             a = bitmap[:index] + '1'*fileblocks + bitmap[index+fileblocks:]
-            #print(a)
             chunks = [texto[i:i+64] for i in range(0, len(texto), 64)]
+
+            # Se escribe el contenido en los bloques de archivo necesarios
             for i,n in enumerate(chunks):
                 new_fileblock = FileBlock()
                 new_fileblock.b_content = n
@@ -111,10 +127,9 @@ def mkgrp(params, mounted_partitions, id):
                 file.seek(primerbloque+i*64)
                 file.write(new_fileblock.pack())
             
-            # Reescribimos el inodo
-            file.seek(siguiente)
+            # Se actualiza el inode y el bitmap
+            file.seek(ubicacion_inodo_users)
             file.write(inodo.pack())
-            # Reescribimos el mapa de bits
             file.seek(bitmap_bloques_inicio)
             file.write(a.encode('utf-8'))
             return

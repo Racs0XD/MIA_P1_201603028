@@ -36,7 +36,7 @@ class MBR:
         
         # Imprime la información del disco recién creado usando la librería prettytable
         print("=================================================")
-        print("================== MBR CREADO  ==================")
+        print("================== Creando MBR ==================")
         print("=================================================")
         from prettytable import PrettyTable
         table = PrettyTable()

@@ -42,3 +42,4 @@ class Inode:
         inode.i_block = list(unpacked_data[7:22])
         inode.i_perm = unpacked_data[22]
         return inode
+

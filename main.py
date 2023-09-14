@@ -9,12 +9,14 @@ from Admin_Usuario_Grupo.MKGRP import mkgrp
 from Admin_Usuario_Grupo.RMGRP import rmgrp
 from Admin_Usuario_Grupo.MKUSR import mkusr
 from Admin_Usuario_Grupo.RMUSR import rmusr
+from Estructuras.BITMAP import bitMap
 import re
 
-#Se definen las variables globales
+# Se definen las variables globales
 particiones_montadas = []
-usuarios = None
-particion_actual = None
+usuarios = None  # Valor predeterminado None al inicio del programa
+particion_actual = None  # Valor predeterminado None al inicio del program
+
 
 def execute(comando):
     # Obtener el path del archivo
@@ -42,14 +44,56 @@ def execute(comando):
         print("Error: El archivo especificado no existe")
 
 def validar_comando(comando):
-    global usuarios
+    global usuarios, particion_actual
     # Separar el comando y los argumentos
     comando_separado = comando.split('-')
     cmd = comando_separado[0].replace(' ', '').lower() # Obtenemos el comando
+    argumentos = comando_separado[1:] # Obtenemos los argumentos
     # Verificar si es el comando mkdisk
     
     if cmd == "mkdisk":
-        argumentos = comando_separado[1:] # Obtenemos los argumentos
+        mkdiskCom(argumentos)
+
+    elif cmd == "rmdisk":
+        rmdiskCom(argumentos)
+
+    elif cmd == "fdisk":
+        fdiskCom(argumentos)
+
+    elif cmd == "mount":
+        mountCom(argumentos)
+    
+    elif cmd == "unmount":
+        unmountCom(argumentos)
+
+    elif cmd == "mkfs":
+        mkfsCom(argumentos)
+
+    elif cmd == "login":
+        loginCom(argumentos)
+    
+    elif cmd == "logout":
+        logoutCom(argumentos)          
+    
+    elif cmd == "mkgrp":
+        mkgrpCom(argumentos)
+    
+    elif cmd == "rmgrp":
+        rmgrpCom(argumentos)
+    
+    elif cmd == "mkusr":
+        mkusrCom(argumentos)
+
+    elif cmd == "rmusr":
+        rmusrCom(argumentos)
+
+    elif cmd == "exit":
+        exit()
+
+    else:
+        print("Error: comando no reconocido.")
+
+def mkdiskCom(argumentos):
         # Convertir los argumentos en un diccionario
         parametros = {}
         for arg in argumentos:
@@ -62,186 +106,179 @@ def validar_comando(comando):
             return
         else:
             mkdisk(parametros)
-
-    elif cmd == "rmdisk":
-        argumentos = comando_separado[1:]
-        # Convertir los argumentos en un diccionario
-        parametros = {}
-        for arg in argumentos:
-            key, value = arg.split('=')
-            parametros[key.lower()] = value
-
-        # Validar los parametros recibidos
-        if "path" not in parametros:
-            print("Error: el parametro path es obligatorio para el comando rmdisk")
-            return
-        else:
-            rmdisk(parametros)
-
-    elif cmd == "fdisk":
-        argumentos = comando_separado[1:]
-        # Convertir los argumentos en un diccionario
-        parametros = {}
-        for arg in argumentos:
-            key, value = arg.split('=')
-            parametros[key.lower()] = value
-
-        # Validar los parametros recibidos
-        if "size" not in parametros or "path" not in parametros or "name" not in parametros:
-            print("Error: los parametros size, path y name son obligatorios para el comando fdisk")
-            return
-        else:
-            fdisk(parametros)   
-
-    elif cmd == "mount":
-        argumentos = comando_separado[1:]
-        # Convertir los argumentos en un diccionario
-        parametros = {}
-        for arg in argumentos:
-            key, value = arg.split('=')
-            parametros[key.lower()] = value
-
-        # Validar los parametros recibidos
-        if "path" not in parametros or "name" not in parametros:
-            print("Error: los parametros path y name son obligatorios para el comando mount")
-            return
-        else:
-            mount(parametros, particiones_montadas)
-    
-    elif cmd == "unmount":
-        argumentos = comando_separado[1:]
-        # Convertir los argumentos en un diccionario
-        parametros = {}
-        for arg in argumentos:
-            key, value = arg.split('=')
-            parametros[key.lower()] = value
-
-        # Validar los parametros recibidos
-        if "id" not in parametros:
-            print("Error: el parametro id es obligatorio para el comando unmount")
-            return
-        else:
-            unmount(parametros, particiones_montadas)
-
-    elif cmd == "mkfs":
-        argumentos = comando_separado[1:]
-        # Convertir los argumentos en un diccionario
-        parametros = {}
-        for arg in argumentos:
-            key, value = arg.split('=')
-            parametros[key.lower()] = value
         
-        # Validar los parametros recibidos
-        if "id" not in parametros:
-            print("Error: el parametro id es obligatorio para el comando mkfs")
-            return
-        else:
-            mkfs(parametros, particiones_montadas,usuarios)
+def rmdiskCom(argumentos):
+    # Convertir los argumentos en un diccionario
+    parametros = {}
+    for arg in argumentos:
+        key, value = arg.split('=')
+        parametros[key.lower()] = value
 
-    elif cmd == "login":
-        argumentos = comando_separado[1:]
-        # Convertir los argumentos en un diccionario
-        parametros = {}
-        for arg in argumentos:
-            key, value = arg.split('=')
-            parametros[key.lower()] = value
-        
-        # Validar los parametros recibidos
-        if "user" not in parametros or "pass" not in parametros or "id" not in parametros:
-            print("Error: los parametros user, pass e id son obligatorios para el comando login")
-            return
-        else:
-            global particion_actual
-            usuarios, particion_actual = login(parametros, particiones_montadas)
+    # Validar los parametros recibidos
+    if "path" not in parametros:
+        print("Error: el parametro path es obligatorio para el comando rmdisk")
+        return
+    else:
+        rmdisk(parametros)
+
+def fdiskCom(argumentos):
+    # Convertir los argumentos en un diccionario
+    parametros = {}
+    for arg in argumentos:
+        key, value = arg.split('=')
+        parametros[key.lower()] = value
+
+    # Validar los parametros recibidos
+    if "size" not in parametros or "path" not in parametros or "name" not in parametros:
+        print("Error: los parametros size, path y name son obligatorios para el comando fdisk")
+        return
+    else:
+        fdisk(parametros)   
+
+def mountCom(argumentos):
+    # Convertir los argumentos en un diccionario
+    parametros = {}
+    for arg in argumentos:
+        key, value = arg.split('=')
+        parametros[key.lower()] = value
+
+    # Validar los parametros recibidos
+    if "path" not in parametros or "name" not in parametros:
+        print("Error: los parametros path y name son obligatorios para el comando mount")
+        return
+    else:
+        mount(parametros, particiones_montadas)
+
+def unmountCom(argumentos):
+    # Convertir los argumentos en un diccionario
+    parametros = {}
+    for arg in argumentos:
+        key, value = arg.split('=')
+        parametros[key.lower()] = value
+
+    # Validar los parametros recibidos
+    if "id" not in parametros:
+        print("Error: el parametro id es obligatorio para el comando unmount")
+        return
+    else:
+        unmount(parametros, particiones_montadas)
+
+def mkfsCom(argumentos):
+    # Convertir los argumentos en un diccionario
+    parametros = {}
+    for arg in argumentos:
+        key, value = arg.split('=')
+        parametros[key.lower()] = value
     
-    elif cmd == "logout":
-        logout_users = {}
-        if usuarios is not None:
-            logout_users = usuarios
-            usuarios = None
+    # Validar los parametros recibidos
+    if "id" not in parametros:
+        print("Error: el parametro id es obligatorio para el comando mkfs")
+        return
+    else:
+        mkfs(parametros, particiones_montadas,usuarios)
+
+def loginCom(argumentos):
+    global usuarios, particion_actual
+    # Convertir los argumentos en un diccionario
+    parametros = {}
+    for arg in argumentos:
+        key, value = arg.split('=')
+        parametros[key.lower()] = value
+    
+    # Validar los parametros recibidos
+    if "user" not in parametros or "pass" not in parametros or "id" not in parametros:
+        print("Error: los parametros user, pass e id son obligatorios para el comando login")
+        return
+    else:
+        login_result = login(parametros, particiones_montadas)
+        bitMap('login '+str(parametros), particiones_montadas, particion_actual)
+        if login_result is None:
+            print("Error: la funcion login no devolvio valores validos")
+            return
+        usuarios, particion_actual = login_result
+
+def logoutCom(argumentos):
+    logout_users = {}
+    if usuarios is not None:
+        logout_users = usuarios
+        usuarios = None
+    else:
+        print("No hay usuarios logueados")
+    result = ('logout', logout_users)
+    return result    
+
+def mkgrpCom(argumentos):
+    # Convertir los argumentos en un diccionario
+    parametros = {}
+    for arg in argumentos:
+        key, value = arg.split('=')
+        parametros[key.lower()] = value
+    
+    # Validar los parametros recibidos
+    if "name" not in parametros:
+        print("Error: el parametro name es obligatorio para el comando mkgrp")
+        return
+    else:
+        if usuarios != None and usuarios['username'] == 'root':
+            mkgrp(parametros, particiones_montadas, particion_actual)
+            bitMap('mkgrp '+str(parametros), particiones_montadas, particion_actual)
         else:
             print("No hay usuarios logueados")
-        result = ('logout', logout_users)
-        return result              
-    
-    elif cmd == "mkgrp":
-        argumentos = comando_separado[1:]
-        # Convertir los argumentos en un diccionario
-        parametros = {}
-        for arg in argumentos:
-            key, value = arg.split('=')
-            parametros[key.lower()] = value
-        
-        # Validar los parametros recibidos
-        if "name" not in parametros:
-            print("Error: el parametro name es obligatorio para el comando mkgrp")
-            return
-        else:
-            if usuarios is not None:
-                usuarios = mkgrp(parametros, usuarios)
-            else:
-                print("No hay usuarios logueados")
-    
-    elif cmd == "rmgrp":
-        argumentos = comando_separado[1:]
-        # Convertir los argumentos en un diccionario
-        parametros = {}
-        for arg in argumentos:
-            key, value = arg.split('=')
-            parametros[key.lower()] = value
-        
-        # Validar los parametros recibidos
-        if "name" not in parametros:
-            print("Error: el parametro name es obligatorio para el comando rmgrp")
-            return
-        else:
-            if usuarios is not None:
-                usuarios = rmgrp(parametros, usuarios)
-            else:
-                print("No hay usuarios logueados")
-    
-    elif cmd == "mkusr":
-        argumentos = comando_separado[1:]
-        # Convertir los argumentos en un diccionario
-        parametros = {}
-        for arg in argumentos:
-            key, value = arg.split('=')
-            parametros[key.lower()] = value
-        
-        # Validar los parametros recibidos
-        if "user" not in parametros or "pass" not in parametros or "grp" not in parametros:
-            print("Error: los parametros user, pass y grp son obligatorios para el comando mkusr")
-            return
-        else:
-            if usuarios is not None and usuarios['username'] == 'root':
-                usuarios = mkusr(parametros, particiones_montadas, particion_actual)
-            else:
-                print("No hay usuarios logueados")
 
-    elif cmd == "rmusr":
-        argumentos = comando_separado[1:]
-        # Convertir los argumentos en un diccionario
-        parametros = {}
-        for arg in argumentos:
-            key, value = arg.split('=')
-            parametros[key.lower()] = value
-        
-        # Validar los parametros recibidos
-        if "user" not in parametros:
-            print("Error: el parametro user es obligatorio para el comando rmusr")
-            return
-        else:
-            if usuarios is not None:
-                usuarios = rmusr(parametros, usuarios)
-            else:
-                print("No hay usuarios logueados")
-
-    elif cmd == "exit":
-        exit()
-
+def rmgrpCom(argumentos):
+    # Convertir los argumentos en un diccionario
+    parametros = {}
+    for arg in argumentos:
+        key, value = arg.split('=')
+        parametros[key.lower()] = value
+    
+    # Validar los parametros recibidos
+    if "name" not in parametros:
+        print("Error: el parametro name es obligatorio para el comando rmgrp")
+        return
     else:
-        print("Error: comando no reconocido.")
+        if usuarios != None and usuarios['username'] == 'root':
+            rmgrp(parametros, particiones_montadas, particion_actual)
+            bitMap('rmgrp '+str(parametros), particiones_montadas, particion_actual)
+        else:
+            print("No hay usuarios logueados")
 
+def mkusrCom(argumentos):
+    # Convertir los argumentos en un diccionario
+    parametros = {}
+    for arg in argumentos:
+        key, value = arg.split('=')
+        parametros[key.lower()] = value
+    
+    # Validar los parametros recibidos
+    if "user" not in parametros or "pass" not in parametros or "grp" not in parametros:
+        print("Error: los parametros user, pass y grp son obligatorios para el comando mkusr")
+        return
+    else:
+        if usuarios != None and usuarios['username'] == 'root':
+            mkusr(parametros, particiones_montadas, particion_actual)
+            bitMap('mkusr '+str(parametros), particiones_montadas, particion_actual)
+        else:
+            print("No hay usuarios logueados")
+
+def rmusrCom(argumentos):
+    # Convertir los argumentos en un diccionario
+    parametros = {}
+    for arg in argumentos:
+        key, value = arg.split('=')
+        parametros[key.lower()] = value
+    
+    # Validar los parametros recibidos
+    if "user" not in parametros:
+        print("Error: el parametro user es obligatorio para el comando rmusr")
+        return
+    else:
+        if usuarios is not None:
+            rmusr(parametros, particiones_montadas, particion_actual)
+            bitMap('rmusr '+str(parametros), particiones_montadas, particion_actual)
+        else:
+            print("No hay usuarios logueados")
+    
 def main():
     while True:
             command = input("Ingrese el comando: ")
