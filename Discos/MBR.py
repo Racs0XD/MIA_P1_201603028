@@ -34,15 +34,14 @@ class MBR:
         # Crea una lista con 4 particiones vacias
         self.particiones = [Partition(ex), Partition(ex), Partition(ex), Partition(ex)]
         
-        # Imprime la información del disco recién creado usando la librería prettytable
+        
         print("=================================================")
         print("================== Creando MBR ==================")
         print("=================================================")
-        from prettytable import PrettyTable
-        table = PrettyTable()
-        table.field_names = ["Size", "Date", "Sig.", "Fit"]
-        table.add_row([self.mbr_tamano, self.mbr_fecha_creacion, self.mbr_dsk_signature, self.fit])
-        print(table)
+        print(f"Size: {self.mbr_tamano}")
+        print(f"Date: {self.mbr_fecha_creacion}")
+        print(f"Signature: {self.mbr_dsk_signature}")
+        print(f"Fit: {self.fit}")
         print("=================================================\n")
         
         # Verifica que el tipo de ajuste sea válida

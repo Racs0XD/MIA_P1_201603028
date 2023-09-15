@@ -68,7 +68,7 @@ class EBR:
         
         # Obtiene la información de la partición EBR desde la tupla desempaquetada
         ebr.status = unpacked_data[0]
-        fit_char = unpacked_data[1].decode()  # Decodifica el caracter de la política de ajuste
+        fit_char = unpacked_data[1].decode()  # Decode the fit character
         fit_map = {'B': 'BF', 'F': 'FF', 'W': 'WF', 'N': 'NF'}
         ebr.fit = fit_map[fit_char]
         ebr.type = unpacked_data[2].decode('utf-8')

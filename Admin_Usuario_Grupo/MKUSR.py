@@ -29,6 +29,7 @@ def mkusr(parametros, particiones_montadas, id):
             partition = partition_dict[id]
             break
     if not partition:
+        
         print(f"Error: La partición con id {id} no existe.")
         return
     # Obtenemos los detalles de la partición.

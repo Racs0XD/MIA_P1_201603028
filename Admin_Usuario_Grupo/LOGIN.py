@@ -16,7 +16,7 @@ def login(parametros, particiones_montadas):
         user = parametros['user'].replace(' ', '')
         password = parametros['pass'].replace(' ', '')
         id = parametros['id'].replace(' ', '')
-        
+        print(particiones_montadas)
     except:
         print("Error: se requieren el usuario y la contraseña.")
         return None, None
@@ -29,7 +29,7 @@ def login(parametros, particiones_montadas):
             break
 
     if not partition:
-        print(f"Error: La partición con id {id} no existe.")
+        print(f"Error: La partición con id '{id}' no existe.")
         return
 
     # Obtener detalles de la partición montada

@@ -9,7 +9,8 @@ from Admin_Usuario_Grupo.MKGRP import mkgrp
 from Admin_Usuario_Grupo.RMGRP import rmgrp
 from Admin_Usuario_Grupo.MKUSR import mkusr
 from Admin_Usuario_Grupo.RMUSR import rmusr
-from Estructuras.BITMAP import bitMap
+from Estructuras.BITMAP import bitMap, bytesMapD
+from REP import rep
 import re
 
 # Se definen las variables globales
@@ -86,6 +87,9 @@ def validar_comando(comando):
 
     elif cmd == "rmusr":
         rmusrCom(argumentos)
+    
+    elif cmd == "rep":
+        repCom(argumentos)    
 
     elif cmd == "exit":
         exit()
@@ -136,6 +140,7 @@ def fdiskCom(argumentos):
         fdisk(parametros)   
 
 def mountCom(argumentos):
+    global particion_actual
     # Convertir los argumentos en un diccionario
     parametros = {}
     for arg in argumentos:
@@ -147,8 +152,9 @@ def mountCom(argumentos):
         print("Error: los parametros path y name son obligatorios para el comando mount")
         return
     else:
+        particion_actual = parametros['name'].replace(' ', '')
         mount(parametros, particiones_montadas)
-
+        
 def unmountCom(argumentos):
     # Convertir los argumentos en un diccionario
     parametros = {}
@@ -191,15 +197,20 @@ def loginCom(argumentos):
         return
     else:
         login_result = login(parametros, particiones_montadas)
-        bitMap('login '+str(parametros), particiones_montadas, particion_actual)
+        for particion in particiones_montadas:
+            if particion_actual == particion[list(particion.keys())[0]]['name']:
+                n_id = particion[list(particion.keys())[0]]['id']
+        
+        bitMap('login '+str(parametros), particiones_montadas, n_id)
         if login_result is None:
             print("Error: la funcion login no devolvio valores validos")
             return
         usuarios, particion_actual = login_result
 
 def logoutCom(argumentos):
+    global usuarios
     logout_users = {}
-    if usuarios is not None:
+    if usuarios != None:
         logout_users = usuarios
         usuarios = None
     else:
@@ -278,7 +289,24 @@ def rmusrCom(argumentos):
             bitMap('rmusr '+str(parametros), particiones_montadas, particion_actual)
         else:
             print("No hay usuarios logueados")
+
+def repCom(argumentos):
+    # Convertir los argumentos en un diccionario
+    parametros = {}
+    for arg in argumentos:
+        key, value = arg.split('=')
+        parametros[key.lower()] = value
     
+    # Validar los parametros recibidos
+    if "name" not in parametros or "path" not in parametros or "id" not in parametros:
+        print("Error: los parametros name, path e id son obligatorios para el comando rep")
+        return
+    else:
+        if usuarios != None:
+            rep(parametros, particiones_montadas, bytesMapD)
+        else:
+            print("No hay usuarios logueados")
+
 def main():
     while True:
             command = input("Ingrese el comando: ")

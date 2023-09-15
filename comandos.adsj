@@ -2,6 +2,7 @@ mkdisk -size=3000 -unit=K -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk
 
 fdisk -size=300 -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -name=Particion1
 fdisk -type=E -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -unit=K -name=Particion2 -size=300
+fdisk -type=L -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -unit=K -name=Particion3 -size=200
 #fdisk -size=1 -type=L -unit=M -fit=bf -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -name="Particion3"
 #fdisk -type=E -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk -name=Part3 -unit=K -size=200
 #fdisk -delete=full -name="Particion1" -path=/home/oscar/MIA_P1_201603028/CD/Disco1.dsk
@@ -27,5 +28,8 @@ mkgrp -name=usuarios
 
 rmgrp -name=usuarios
 rmusr -user=user3
+pause
+rep -id=281Disco1 -path=/home/oscar/MIA_P1_201603028/reporte1.jpg -name=mbr
 
 #exec -path=/home/oscar/MIA_P1_201603028/comandos.adsj
+#exec -path=/home/oscar/MIA_P1_201603028/com.adsj

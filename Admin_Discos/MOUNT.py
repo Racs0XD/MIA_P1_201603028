@@ -55,5 +55,6 @@ def mount(params, mounted_particiones):
             'size': particiones[index].actual_size,
         }
     })
-    print(f"La partición {name} fue montada exitosamente con el ID {id}.")
+    
+    print(f"La partición {name} fue montada exitosamente con el ID '{id}'.")
  

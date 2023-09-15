@@ -64,7 +64,7 @@ def bitMap(parametros, particiones_montadas, id):
         texto +="\n================================================="
         texto +="\n============= FIN ESTADO BITMAPS ================"
         texto +="\n================================================="
-        print(texto)
+        
 
         # Generar un diagrama DOT con el estado de los bitmaps.
         global bytesMap
